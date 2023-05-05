@@ -4,6 +4,7 @@ from queue import PriorityQueue
 
 samp = 2
 index = 0
+q_fact = 8
 
 root_8 = math.sqrt(8)
 root_2 = math.sqrt(2)
@@ -76,7 +77,6 @@ def get_RGB(image_loc):
     height = hex_to_int(info_header, 8, 12)
     bpp = hex_to_int(info_header, 14, 16)
     
-    print(bpp)
     if (bpp != 24):
         raise Exception("File not in RGB format.")
         
@@ -475,7 +475,7 @@ def create_jpeg_data(shape, Y_q, C_q, sorted_symbols_dc_Y, sorted_symbols_ac_Y, 
     return jpeg_image
 
 # Main
-image = 'waterpool.bmp'
+image = 'hehe.bmp'
 
 R_old, G_old, B_old = get_RGB(image)
 old_shape = R_old.shape
@@ -493,7 +493,8 @@ Y_blocks, Cb_blocks, Cr_blocks = perform_DCT(Y, Cb, Cr)
 # Quantisation Tables
 Y_q = np.array([[4., 3, 4, 4, 4, 6, 11, 15], [3, 3, 3, 4, 5, 8, 14, 19], [3, 4, 4, 5, 8, 12, 16, 20], [4, 5, 6, 7, 12, 14, 18, 20], [6, 6, 9, 11, 14, 17, 21, 23], [9, 12, 12, 18, 23, 22, 25, 21], [11, 13, 15, 17, 21, 23, 25, 21], [13, 12, 12, 13, 16, 19, 21, 21]])
 C_q = np.array([[4., 4, 6, 10, 21, 21, 21, 21], [4, 5, 6, 21, 21, 21, 21, 21], [6, 6, 12, 21, 21, 21, 21, 21], [10, 14, 21, 21, 21, 21, 21, 21], [21, 21, 21, 21, 21, 21, 21, 21], [21, 21, 21, 21, 21, 21, 21, 21], [21, 21, 21, 21, 21, 21, 21, 21], [21, 21, 21, 21, 21, 21, 21, 21]])
-cur = 0
+Y_q *= q_fact
+C_q *= q_fact
 
 # Performing Quantization
 Y_blocks = Quantize(Y_blocks, Y_q)
