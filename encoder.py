@@ -1,10 +1,12 @@
 import numpy as np
 import re, math
 from queue import PriorityQueue
+import cv2
 
 samp = 2
 index = 0
-q_fact = 8
+q_fact = 10
+image = 'lena.bmp'
 
 root_8 = math.sqrt(8)
 root_2 = math.sqrt(2)
@@ -78,6 +80,11 @@ def get_RGB(image_loc):
     bpp = hex_to_int(info_header, 14, 16)
     
     if (bpp != 24):
+        img = cv2.imread(image_loc)
+        R = np.asarray(img[:,:,2], dtype = 'float32')
+        G = np.asarray(img[:,:,1], dtype = 'float32')
+        B = np.asarray(img[:,:,0], dtype = 'float32')
+        return R, G, B
         raise Exception("File not in RGB format.")
         
     # Parsing the data
@@ -475,8 +482,6 @@ def create_jpeg_data(shape, Y_q, C_q, sorted_symbols_dc_Y, sorted_symbols_ac_Y, 
     return jpeg_image
 
 # Main
-image = 'hehe.bmp'
-
 R_old, G_old, B_old = get_RGB(image)
 old_shape = R_old.shape
 
